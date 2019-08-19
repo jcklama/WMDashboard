@@ -9,6 +9,14 @@ export class AppComponent {
   user = retrieveUser(); // Exercise Idea (?): Make interface for 'userData' type
   transactions = null;
   selectedAccount = null;
+
+  pieChartLabels: [];
+  pieChartData: [];
+  pieChartOptions = {
+    legend: {
+      position: 'right'
+    }
+  };
   formatAccountType = (type: string) => {
     switch (type) {
       case 'chequing':
@@ -22,8 +30,17 @@ export class AppComponent {
     }
   }
   getTransactions = (id: string, name: string) => {
+    let pieData = {
+      pieChartLabels: null,
+      pieChartData: null
+    };
+    const data = transactionData[id];
     this.selectedAccount = name;
-    this.transactions = transactionData[id];
+    pieData = getPieData(data);
+    console.log(pieData);
+    this.pieChartLabels = pieData.pieChartLabels;
+    this.pieChartData = pieData.pieChartData;
+    this.transactions = data;
   }
 }
 
@@ -33,67 +50,67 @@ const transactionData = {
       description: 'Payroll deposit',
       date: '2019-01-01',
       amount: '1987',
-      type: 'salary'
+      type: 'Salary'
     },
     {
       description: 'Fido mobile',
       date: '2019-01-03',
       amount: '-65.99',
-      type: 'bill'
+      type: 'Bill'
     },
     {
       description: 'Hydro bill',
       date: '2019-01-10',
       amount: '-123.11',
-      type: 'bill'
+      type: 'Bill'
     },
     {
       description: 'No Frills',
       date: '2019-01-12',
       amount: '-55.65',
-      type: 'grocery'
+      type: 'Grocery'
     },
     {
       description: 'Petro-Canada',
       date: '2019-01-12',
       amount: '-39',
-      type: 'gas'
+      type: 'Gas'
     },
     {
       description: 'Lablaws',
       date: '2019-01-13',
       amount: '-13.96',
-      type: 'grocery'
+      type: 'Grocery'
     },
     {
       description: 'American Eagle',
       date: '2019-01-13',
       amount: '-33.40',
-      type: 'clothing'
+      type: 'Clothing'
     },
     {
       description: 'Payroll deposit',
       date: '2019-01-15',
       amount: '1987',
-      type: 'salary'
+      type: 'Salary'
     },
     {
       description: 'No Frills',
       date: '2019-01-21',
       amount: '-25.23',
-      type: 'grocery'
+      type: 'Grocery'
     },
     {
       description: 'Petro-Canada',
       date: '2019-01-22',
       amount: '-34',
-      type: 'gas'
+      type: 'Gas'
     },
     {
       description: 'Petro-Canada',
       date: '2019-01-28',
       amount: '-31',
-      type: 'gas'
+      type: 'Gas'
     }
   ],
   sav1234: [
@@ -101,19 +118,19 @@ const transactionData = {
       description: 'Deposit',
       date: '2019-01-02',
       amount: '1000',
-      type: 'deposit'
+      type: 'Deposit'
     },
     {
       description: 'Deposit',
       date: '2019-01-16',
       amount: '1000',
-      type: 'deposit'
+      type: 'Deposit'
     },
     {
       description: 'Withdrawl',
       date: '2019-01-28',
       amount: '-500',
-      type: 'withdrawl'
+      type: 'Withdrawl'
     }
 
   ],
@@ -122,25 +139,25 @@ const transactionData = {
       description: 'Roots',
       date: '2019-01-08',
       amount: '-101.20',
-      type: 'clothing'
+      type: 'Clothing'
     },
     {
       description: 'Lablaws',
       date: '2019-01-13',
       amount: '-33.36',
-      type: 'grocery'
+      type: 'Grocery'
     },
     {
       description: 'Mark\s Warehouse',
       date: '2019-01-19',
       amount: '-11.16',
-      type: 'clothing'
+      type: 'Clothing'
     },
     {
       description: 'The GAP',
       date: '2019-01-22',
       amount: '-52.86',
-      type: 'clothing'
+      type: 'Clothing'
     }
   ],
   cc33333: [
@@ -148,16 +165,33 @@ const transactionData = {
       description: 'Jack Astors',
       date: '2019-01-23',
       amount: '-88',
-      type: 'restaurant'
+      type: 'Restaurant'
     },
     {
       description: 'Leon\'s',
       date: '2019-01-24',
       amount: '-120.99',
-      type: 'furniture'
+      type: 'Furniture'
     }
   ]
 };
+
+function getPieData(transactions) {
+  const data = {};
+  transactions.forEach((t) => {
+    if (Number(t.amount) < 0) {
+      if (!data[t.type]) {
+        data[t.type] = Math.abs(Number(t.amount));
+      } else {
+        data[t.type] += Math.abs(Number(t.amount));
+      }
+    }
+  });
+  return {
+    pieChartLabels: Object.keys(data),
+    pieChartData: Object.values(data)
+  };
+}
 
 function retrieveUser() {
   return {
@@ -195,3 +229,4 @@ function retrieveUser() {
     ]
   };
 }
+
