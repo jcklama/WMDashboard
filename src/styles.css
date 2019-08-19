@@ -9,6 +9,7 @@ table {
   border-spacing: 0;
   font: normal 13px Arial, sans-serif;
 }
+
 th {
   background-color: #DDEFEF;
   border: solid 1px #DDEEEE;
@@ -16,16 +17,20 @@ th {
   padding: 10px;
   text-align: left;
 }
+
 td {
   border: solid 1px #DDEEEE;
   color: #333;
   padding: 10px;
 }
+
 td.transaction-icon {
   text-align: center;
-  img {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-  }
 }
+
+td.transaction-icon img {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+/*# sourceMappingURL=styles.css.map */
